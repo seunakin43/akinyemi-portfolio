@@ -1,0 +1,143 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Design tokens: "NOC night shift". Ink background, sodium-amber signal,
+   green reserved for "node up" status dots only. */
+:root {
+  --background: #0a0d12;
+  --foreground: #e8ebef;
+  --card: #10151c;
+  --card-foreground: #e8ebef;
+  --popover: #10151c;
+  --popover-foreground: #e8ebef;
+  --primary: #ffb224;
+  --primary-foreground: #1a1200;
+  --secondary: #161c25;
+  --secondary-foreground: #e8ebef;
+  --muted: #161c25;
+  --muted-foreground: #8d98a8;
+  --accent: #1c2430;
+  --accent-foreground: #e8ebef;
+  --destructive: #ff5a52;
+  --border: #222b37;
+  --input: #222b37;
+  --ring: #ffb224;
+  --radius: 0.75rem;
+  --signal-ok: #3dd68c;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-signal-ok: var(--signal-ok);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Geist Variable", "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --animate-blink: blink 2.4s ease-in-out infinite;
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+    background-color: #0a0d12;
+    color: #e8ebef;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 35%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Glassmorphism: frosted dark panel, light top edge, amber-lit on hover. */
+  .glass {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.075), rgb(255 255 255 / 0.025));
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgb(255 255 255 / 0.09);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.09),
+      0 24px 48px -24px rgb(0 0 0 / 0.7);
+  }
+  .glass-featured {
+    background:
+      radial-gradient(120% 120% at 100% 0%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 60%),
+      linear-gradient(180deg, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0.03));
+    border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+  }
+  .glass-lift {
+    transition:
+      transform 200ms var(--ease-out),
+      border-color 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .glass-lift:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in oklab, var(--primary) 40%, transparent);
+      box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.12),
+        0 28px 56px -24px rgb(0 0 0 / 0.75),
+        0 0 44px -14px color-mix(in oklab, var(--primary) 45%, transparent);
+    }
+  }
+  .eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground;
+  }
+  .section-title {
+    @apply font-display text-4xl leading-[1.05] tracking-tight sm:text-5xl;
+  }
+}
