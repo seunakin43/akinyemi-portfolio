@@ -7,27 +7,19 @@ import {
   ShieldCheck, 
   Zap, 
   Clock, 
-  BarChart3, 
   FileText, 
-  ExternalLink, 
   Maximize2, 
   X, 
-  ArrowLeft, 
-  ArrowRight, 
   CheckCircle2, 
   Share2, 
-  Copy, 
   Check, 
-  Mail, 
-  Phone 
+  Mail,
+  ArrowDown,
+  ArrowRight
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { HubBackLink } from "@/components/HubBackLink";
 import { NodeGrid } from "@/components/NodeGrid";
-import { CountUp } from "@/components/CountUp";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Reveal, Stagger, StaggerItem } from "@/components/Reveal";
 import { profile } from "@/data/content";
 
 export const TelecomPage: React.FC = () => {
@@ -35,9 +27,7 @@ export const TelecomPage: React.FC = () => {
     title: string;
     image: string;
     siteId: string;
-    caption?: string;
-    description?: string;
-    metrics: string[];
+    description: string;
   } | null>(null);
 
   const [copiedLink, setCopiedLink] = useState(false);
@@ -51,63 +41,27 @@ export const TelecomPage: React.FC = () => {
   const telecomProjects = [
     {
       id: "pat-telemetry-colocation",
-      title: "Pan African Towers Real-Time Telemetry Surveillance & Colocation",
-      siteId: "Cluster Node #789-RIV (Rivers State - Outdoor Off-Grid)",
-      subtitle: "Galooli RMS live operational surveillance across 789+ nodes: fuel autonomy, generator runtime, and multi-tenant load balance",
+      title: "Generators and batteries",
+      category: "Power systems",
+      siteId: "Node #789-RIV (Rivers State)",
       image: "/analytics/pat_rms_telemetry_live.png",
-      description: "Direct surveillance feed from Pan African Towers Remote Monitoring System (RMS). Tracks real-time generator engine run-hours (6,610 hrs), rectifier DC voltage stability at 53.5V, consumer load draw at 3.68 kW, and multi-tenant power distribution for Airtel and MTN colocation equipment.",
-      metrics: [
-        "789+ Live Monitored Nodes",
-        "99.8% SLA Nationwide Target",
-        "Dual Colocation Tenant Balance (Airtel + MTN)",
-        "Fuel Autonomy: 234L Active Reserve"
-      ],
-      highlights: [
-        "Real-time sensor polling from AMF25 generator controllers",
-        "Immediate alert correlation for voltage drops under 52.0V",
-        "Automated digital input logging for fuel level depletion rates",
-        "Instant dispatch escalation to field maintenance teams"
-      ]
-    },
-    {
-      id: "pat-airtel-hub-colocation",
-      title: "Multi-Tenant Colocation Load Balancing & Power Distribution",
-      siteId: "Cluster Node #789-ANB (Anambra Hub - Multi-Carrier Colocation)",
-      subtitle: "Managing 10,862 W total colocation power draw across three national carriers: Airtel, MTN, and 9mobile",
-      image: "/analytics/airtel_hub_colocation_analytics.png",
-      description: "Operational colocation telemetry at the Anambra regional carrier hub. Enforces precise power distribution: Airtel (3,273 W / 64.3 A), MTN (4,407 W / 82.6 A), and 9mobile (3,181 W / 59.6 A) under dual generator redundancy with stateful load-drop alarm management.",
-      metrics: [
-        "10,862 W Combined Power Managed",
-        "3 Concurrent National Operators Hosted",
-        "Dual Generator Redundancy (Gen 1: 53L, Gen 2: 128L)",
-        "Zero Tenant Service Interruptions"
-      ],
-      highlights: [
-        "Multi-carrier power split analytics preventing transformer overdraw",
-        "Real-time alarm load drop detection isolating individual tenant anomalies",
-        "Sub-minute automated telemetry ingestion into regional NOC dashboards",
-        "Fuel reserve threshold alarms safeguarding transmission during grid blackout"
-      ]
+      description: "Monitor generator status, engine run hours (6,610 hrs) and battery voltage (53.5V) to help identify issues affecting a tower site."
     },
     {
       id: "pat-borno-generator-autonomy",
-      title: "Heavy Generator Fuel Autonomy & Critical Reserve Surveillance",
-      siteId: "Cluster Node #789-BOR (Borno Regional Hub - Heavy Fuel Reserve)",
-      subtitle: "1,999 L high-capacity fuel reserve surveillance and AMF25 automated generator health monitoring",
+      title: "Track site readiness",
+      category: "Fuel reserve",
+      siteId: "Node #789-BOR (Borno Regional Hub)",
       image: "/analytics/borno_hub_generator_telemetry.png",
-      description: "Critical telemetry monitoring for regional tower infrastructure in Borno State. Tracks high-capacity diesel fuel reserves (1,999 Liters), generator load demand (6,870 W), AMF25 automated run-hours (2,036 hrs), and three balanced rectifiers supporting continuous off-grid cellular coverage.",
-      metrics: [
-        "1,999 L Diesel Reserve Tracked",
-        "6,870 W Sustained Generator Output",
-        "2,036 Engine Run-Hours Governed",
-        "3 Balanced Rectifiers at 53.5V"
-      ],
-      highlights: [
-        "Long-duration off-grid power management in remote terrain",
-        "Automated fuel theft and rapid-depletion diagnostic alerts",
-        "Rectifier DC phase balancing ensuring battery bank charging stability",
-        "Sustained 99.8% uptime despite complete lack of commercial grid supply"
-      ]
+      description: "Review fuel readings (1,999L reserve) and operating conditions to help teams plan maintenance and prevent avoidable interruptions."
+    },
+    {
+      id: "pat-airtel-hub-colocation",
+      title: "Support several mobile operators",
+      category: "Shared infrastructure",
+      siteId: "Node #789-ANB (Anambra Hub)",
+      image: "/analytics/airtel_hub_colocation_analytics.png",
+      description: "Monitor power allocation at shared tower sites hosting Airtel, MTN and 9mobile transmission equipment."
     }
   ];
 
@@ -142,146 +96,176 @@ export const TelecomPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Hero Section: Specific to Telecom Operations */}
-        <div className="grid gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14 items-center">
+        {/* Subhero Section: Human, Clear, Not Text Heavy */}
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 items-center">
           
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-signal-ok/40 bg-signal-ok/10 text-signal-ok text-xs font-mono uppercase tracking-[0.14em]">
-              <span className="size-2 rounded-full bg-signal-ok animate-pulse" />
-              <span>Mission-Critical 24/7 Network Operations</span>
+              <span className="size-1.5 rounded-full bg-signal-ok" />
+              <span>Telecommunications · Operations experience</span>
             </div>
 
-            <h1 className="font-serif text-4xl sm:text-6xl text-foreground font-normal tracking-tight leading-[1.05]">
-              Zero downtime in mission-critical operations. <em className="text-primary italic">24/7 SLA Surveillance</em> across 789+ nodes.
+            <h1 className="font-display text-4xl sm:text-6xl text-foreground font-normal tracking-tight leading-[1.05]">
+              Help catch network faults early and <em className="text-primary italic font-normal">get service restored.</em>
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl">
-              I am Toluwanimi Akinyemi, Network Operations Centre Operator at Pan African Towers (Nov 2022 – Present). Within a 6-year professional career centered on infrastructure reliability and enterprise data, I direct 24/7 mission-critical surveillance across 789+ active cell towers throughout Nigeria—sustaining nationwide 99.8% SLA compliance, cutting MTTR by 30% through Root Cause Analysis (RCA) frameworks, and governing multi-tenant power colocation for Airtel, MTN, and 9mobile.
+              As a Network Operations Centre operator, I monitor mobile tower sites, respond to alerts and coordinate with engineering teams when service is at risk. The work supports reliable mobile coverage across Nigeria.
             </p>
 
-            {/* Headline Telemetry Bento */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-              <div className="p-4 rounded-2xl glass border-border/80">
-                <span className="font-display text-3xl sm:text-4xl text-primary font-bold">789+</span>
-                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">Live Monitored Nodes</span>
-              </div>
-              <div className="p-4 rounded-2xl glass border-border/80">
-                <span className="font-display text-3xl sm:text-4xl text-signal-ok font-bold">99.8%</span>
-                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">Sustained SLA Uptime</span>
-              </div>
-              <div className="p-4 rounded-2xl glass border-border/80">
-                <span className="font-display text-3xl sm:text-4xl text-foreground font-bold">−30%</span>
-                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">MTTR via RCA Templates</span>
-              </div>
-              <div className="p-4 rounded-2xl glass border-border/80">
-                <span className="font-display text-3xl sm:text-4xl text-foreground font-bold">+40%</span>
-                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">Fault Workflow Gain</span>
-              </div>
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Button asChild size="lg" className="bg-primary text-primary-foreground font-mono text-xs font-semibold shadow-md">
+                <a href="#experience" className="inline-flex items-center gap-2">
+                  See the work <ArrowDown className="size-4" />
+                </a>
+              </Button>
+
+              <Button asChild size="lg" variant="outline" className="glass border-white/10 bg-transparent text-foreground hover:border-primary/40 font-mono text-xs">
+                <a href={`mailto:${profile.email}?subject=Inquiry:%20Telecom%20Operations`} className="inline-flex items-center gap-1.5">
+                  Contact me ↗
+                </a>
+              </Button>
             </div>
           </div>
 
-          {/* Right Column: Headshot in Glass Frame */}
-          <div className="relative mx-auto w-full max-w-sm">
-            <div className="glass overflow-hidden rounded-3xl p-2.5 shadow-2xl">
-              <img
-                src="/hh.jpg"
-                alt="Portrait of Toluwanimi Akinyemi"
-                className="aspect-[4/5] w-full rounded-2xl object-cover object-top filter brightness-95"
-              />
+          {/* Visual Step Box: From Alert to Response */}
+          <div className="glass rounded-3xl p-6 sm:p-7 border border-signal-ok/30 bg-signal-ok/[0.03] space-y-4 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-border/60">
+              <span className="font-display text-base font-semibold text-foreground">From alert to response</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-signal-ok/10 text-signal-ok border border-signal-ok/30">
+                Operations overview
+              </span>
             </div>
-            
-            <div className="glass absolute -bottom-3 left-4 flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs shadow-xl border border-white/10">
-              <span className="size-2 rounded-full bg-signal-ok animate-pulse" />
-              <span>Pan African Towers Ltd · NOC Shift</span>
+
+            <p className="text-xs text-muted-foreground">
+              How network monitoring supports restoration
+            </p>
+
+            <div className="space-y-2">
+              <div className="p-3 rounded-xl bg-background/80 border border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Site reports an alarm</span>
+                <strong className="text-signal-ok font-mono font-semibold">Monitor</strong>
+              </div>
+              <div className="p-3 rounded-xl bg-background/80 border border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Operator checks impact and cause</span>
+                <strong className="text-primary font-mono font-semibold">Investigate</strong>
+              </div>
+              <div className="p-3 rounded-xl bg-background/80 border border-signal-ok/40 bg-signal-ok/[0.04] flex items-center justify-between text-xs">
+                <span className="text-foreground font-medium">Engineering team is engaged</span>
+                <strong className="text-signal-ok font-mono font-bold">Restore</strong>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-border/60 text-[11px] font-mono text-muted-foreground">
+              NOC means Network Operations Centre, where teams monitor service and coordinate responses.
             </div>
           </div>
 
         </div>
 
-        {/* Specific & Precise About Telecom Operations */}
-        <div className="p-8 sm:p-12 rounded-3xl glass border border-primary/20 space-y-6 relative overflow-hidden">
-          <div className="flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-wider">
-            <Activity className="size-4" />
-            <span>Domain Specialization: Telecommunication Infrastructure Operations</span>
-          </div>
-
-          <h2 className="font-display text-2xl sm:text-4xl text-foreground">
-            Mission-Critical Reliability & Zero Downtime in High-Stakes Operations.
-          </h2>
-
-          <div className="grid gap-6 sm:grid-cols-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
-            <p>
-              Telecommunication tower infrastructure is the invisible backbone of modern commerce. At Pan African Towers (Nov 2022 – Present), I direct 24/7 surveillance across 789+ tower nodes through Galooli Remote Monitoring Systems (RMS) and Operations Work Station (OWS) consoles. Every node operates under strict SLA commitments where unscheduled outages incur severe commercial penalties and disconnect thousands of mobile subscribers.
-            </p>
-            <p>
-              My operational discipline centers on proactive fault isolation before catastrophic failure occurs: evaluating generator AMF25 controllers, monitoring 1,999L fuel reserves to avert dry-runs, tracking battery voltage guardrails at 53.5V, and standardizing Root Cause Analysis (RCA) reporting across all regional clusters.
-            </p>
-          </div>
-
-          {/* Operational Methodology Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-4">
-            <div className="p-4 rounded-xl bg-background/60 border border-border space-y-1">
-              <span className="font-mono text-xs font-bold text-primary flex items-center gap-1.5">
-                <Zap className="size-3.5" /> Power Uptime Engineering
-              </span>
-              <p className="text-xs text-muted-foreground">
-                Diesel generator autonomy, AMF25 automatic transfer, and DC rectifier load balance across off-grid cell sites.
-              </p>
+        {/* Metrics Bar */}
+        <div className="glass rounded-2xl p-5 sm:p-6 border border-border/80">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="space-y-1">
+              <b className="font-display text-3xl sm:text-4xl text-primary font-bold block">789+</b>
+              <span className="text-xs text-muted-foreground font-mono block">Tower sites monitored</span>
             </div>
-
-            <div className="p-4 rounded-xl bg-background/60 border border-border space-y-1">
-              <span className="font-mono text-xs font-bold text-primary flex items-center gap-1.5">
-                <Clock className="size-3.5" /> Rapid RCA Minimization
-              </span>
-              <p className="text-xs text-muted-foreground">
-                Standardized incident classification cutting Mean Time to Repair (MTTR) by 30% nationwide.
-              </p>
+            <div className="space-y-1 lg:border-l lg:border-border/60 lg:pl-6">
+              <b className="font-display text-3xl sm:text-4xl text-signal-ok font-bold block">99.8%</b>
+              <span className="text-xs text-muted-foreground font-mono block">Reported service level achievement</span>
             </div>
-
-            <div className="p-4 rounded-xl bg-background/60 border border-border space-y-1">
-              <span className="font-mono text-xs font-bold text-primary flex items-center gap-1.5">
-                <Radio className="size-3.5" /> Multi-Tenant Colocation
-              </span>
-              <p className="text-xs text-muted-foreground">
-                Concurrent power allocation and individual load isolation for Airtel, MTN, and 9mobile transmission gear.
-              </p>
+            <div className="space-y-1 lg:border-l lg:border-border/60 lg:pl-6">
+              <b className="font-display text-3xl sm:text-4xl text-foreground font-bold block">−30%</b>
+              <span className="text-xs text-muted-foreground font-mono block">Reported repair-time reduction</span>
+            </div>
+            <div className="space-y-1 lg:border-l lg:border-border/60 lg:pl-6">
+              <b className="font-display text-3xl sm:text-4xl text-amber-400 font-bold block">24/7</b>
+              <span className="text-xs text-muted-foreground font-mono block">Monitoring and incident response</span>
             </div>
           </div>
         </div>
 
-        {/* Live 789-Node Interactive Telemetry Simulator */}
-        <div className="glass rounded-3xl p-6 sm:p-10 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* What the Role Involves */}
+        <section id="experience" className="space-y-8 scroll-mt-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <span className="eyebrow text-primary">Live Network Telemetry Simulation</span>
-              <h3 className="font-display text-2xl sm:text-3xl text-foreground mt-1">
-                789+ Node Infrastructure Matrix
-              </h3>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Simulating nationwide tower grid state. Faults are immediately isolated via automated RCA protocols.
-              </p>
+              <div className="inline-flex items-center gap-2 text-primary font-mono text-xs font-semibold uppercase tracking-wider">
+                <Activity className="size-3.5" />
+                <span>What the role involves</span>
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl text-foreground mt-2">
+                Keep the network visible. Make the response clear.
+              </h2>
+            </div>
+            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
+              At Pan African Towers, I support around-the-clock monitoring and coordinate the next steps when a site reports a fault.
+            </p>
+          </div>
+
+          {/* 3 Role Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="glass rounded-3xl p-6 border-border/80 flex flex-col justify-between space-y-4">
+              <div>
+                <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-signal-ok/10 text-signal-ok border border-signal-ok/30 uppercase tracking-wider font-semibold">
+                  Monitor
+                </span>
+                <h3 className="font-display text-2xl text-foreground mt-3 mb-2">
+                  Watch site alarms
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Use the Operations Work Station and remote monitoring dashboards to spot site alarms and changes in equipment status.
+                </p>
+              </div>
             </div>
 
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs bg-signal-ok/15 text-signal-ok border border-signal-ok/30 shrink-0">
-              <span className="size-2 rounded-full bg-signal-ok animate-pulse" />
-              <span>99.8% Availability Target Active</span>
-            </span>
+            <div className="glass rounded-3xl p-6 border-border/80 flex flex-col justify-between space-y-4">
+              <div>
+                <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-primary/10 text-primary border border-primary/30 uppercase tracking-wider font-semibold">
+                  Investigate
+                </span>
+                <h3 className="font-display text-2xl text-foreground mt-3 mb-2">
+                  Understand what happened
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Review the site information, identify likely causes and record incidents using a consistent root-cause format.
+                </p>
+              </div>
+            </div>
+
+            <div className="glass rounded-3xl p-6 border-border/80 flex flex-col justify-between space-y-4">
+              <div>
+                <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-sky-500/10 text-sky-400 border border-sky-500/30 uppercase tracking-wider font-semibold">
+                  Coordinate
+                </span>
+                <h3 className="font-display text-2xl text-foreground mt-3 mb-2">
+                  Move the response forward
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Work with field and engineering teams to escalate faults, share useful details and support service restoration.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="my-4">
-            <NodeGrid />
-          </div>
-        </div>
+          <p className="text-xs text-muted-foreground italic">
+            OWS is an Operations Work Station. Galooli RMS is the remote monitoring system used to view site equipment and readings.
+          </p>
+        </section>
 
-        {/* Operational Case Studies & Live Artifacts */}
-        <div className="space-y-8">
-          <div>
-            <span className="eyebrow text-primary">Verified Telemetry & Incident Artifacts</span>
-            <h2 className="section-title mt-2">
-              Operational Case Studies from the NOC Floor.
-            </h2>
-            <p className="text-sm text-muted-foreground mt-2 max-w-2xl">
-              Inspect verified telemetry dashboards from Pan African Towers production systems. Click any artifact below to examine sensor readings, generator runtimes, and tenant colocation splits in full resolution.
+        {/* Operational Evidence Cards with Screenshots (Site IDs Blurred Out) */}
+        <section className="space-y-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 text-primary font-mono text-xs font-semibold uppercase tracking-wider">
+                <ShieldCheck className="size-3.5" />
+                <span>Operational evidence</span>
+              </div>
+              <h2 className="font-display text-3xl text-foreground mt-1">
+                Examples of the infrastructure I monitor.
+              </h2>
+            </div>
+            <p className="text-sm text-muted-foreground max-w-md">
+              Verified equipment dashboards from Pan African Towers production systems.
             </p>
           </div>
 
@@ -289,7 +273,7 @@ export const TelecomPage: React.FC = () => {
             {telecomProjects.map((p) => (
               <div
                 key={p.id}
-                className="glass glass-lift rounded-3xl overflow-hidden flex flex-col justify-between border-border/80 hover:border-primary/50 transition-all group"
+                className="glass rounded-3xl overflow-hidden flex flex-col justify-between border-border/80 hover:border-signal-ok/40 transition-all group"
               >
                 <div>
                   <div
@@ -312,70 +296,76 @@ export const TelecomPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="p-6 space-y-3">
-                    <h3 className="font-display text-xl text-foreground group-hover:text-primary transition-colors leading-snug">
+                  <div className="p-6 space-y-2">
+                    <span className="text-[10px] font-mono text-signal-ok uppercase tracking-wider">
+                      {p.category}
+                    </span>
+                    <h3 className="font-display text-xl text-foreground group-hover:text-signal-ok transition-colors">
                       {p.title}
                     </h3>
                     <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
                       {p.description}
                     </p>
-
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {p.metrics.slice(0, 2).map((m, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2.5 py-0.5 rounded-lg bg-secondary/80 text-secondary-foreground font-mono text-[10px] border border-border/40"
-                        >
-                          {m}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 </div>
 
                 <div className="p-4 bg-secondary/20 border-t border-border/40 flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-muted-foreground">Galooli RMS Live</span>
+                  <span className="text-[11px] font-mono text-muted-foreground">Galooli RMS</span>
                   <button
                     onClick={() => setSelectedScreenshot(p)}
-                    className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-primary hover:text-primary/80 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-signal-ok hover:underline cursor-pointer"
                   >
-                    <span>Inspect Telemetry →</span>
+                    <span>Inspect Dashboard →</span>
                   </button>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Standardized RCA Technical Documentation Card */}
-        <div className="p-8 sm:p-10 rounded-3xl glass border border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <span className="eyebrow text-primary">Standardized Incident Triage & RCA Framework</span>
-            <h3 className="font-display text-2xl sm:text-3xl text-foreground">
-              Root Cause Analysis Methodology Report
-            </h3>
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Examine the engineering framework that unified fault handling across regional NOC branches in Nigeria, eliminated disparate incident reporting, and reduced nationwide Mean Time to Repair (MTTR) by 30%.
-            </p>
+        {/* Live 789+ Node Infrastructure Matrix */}
+        <div className="glass rounded-3xl p-6 sm:p-8 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span className="font-mono text-xs text-primary uppercase tracking-wider">Live Network Simulation</span>
+              <h3 className="font-display text-2xl sm:text-3xl text-foreground mt-1">
+                789+ Node Infrastructure Matrix
+              </h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Simulating nationwide cell site grid state with automated fault isolation.
+              </p>
+            </div>
+
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs bg-signal-ok/15 text-signal-ok border border-signal-ok/30 shrink-0">
+              <span className="size-2 rounded-full bg-signal-ok animate-pulse" />
+              <span>99.8% Availability Target Active</span>
+            </span>
           </div>
 
+          <div className="my-2">
+            <NodeGrid />
+          </div>
+        </div>
+
+        {/* Callout Section */}
+        <div className="glass rounded-3xl p-7 sm:p-8 border border-signal-ok/30 bg-signal-ok/[0.04] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="space-y-1">
+            <h3 className="font-display text-2xl text-foreground">Bring operational experience to automation.</h3>
+            <p className="text-xs sm:text-sm text-muted-foreground">My telecom work informs practical ideas for alarm triage and incident escalation.</p>
+          </div>
           <a
-            href="/capstone/AI%20Automation%20Opportunities%20for%20a%20Telecommunication%20NOC%20Engineer%20-%20Toluwanimi%20Akinyemi.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-mono font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shrink-0 shadow-sm"
+            href="/automation"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm shrink-0"
           >
-            <FileText className="size-4" />
-            <span>Read NOC Technical Paper (PDF)</span>
+            <span>See automation work ↗</span>
           </a>
         </div>
 
-        {/* Direct Link to Main Portfolio */}
-        <div className="pt-8 border-t border-border/60 flex items-center justify-between">
+        {/* Footer Linkage */}
+        <div className="pt-8 border-t border-border/60 flex items-center justify-between text-xs font-mono text-muted-foreground">
           <HubBackLink />
-          <span className="text-xs font-mono text-muted-foreground ml-auto">
-            Toluwanimi Akinyemi · Telecommunications Operations Portfolio
-          </span>
+          <span>Telecom operations · Toluwanimi Akinyemi</span>
+          <a href="/analytics" className="hover:text-primary transition-colors">Next: Analytics ↗</a>
         </div>
 
       </div>
@@ -400,10 +390,7 @@ export const TelecomPage: React.FC = () => {
             >
               <div className="p-4 sm:p-5 bg-background border-b border-border flex items-center justify-between gap-4">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs text-primary">{selectedScreenshot.siteId}</span>
-                    <span className="text-xs font-mono text-muted-foreground">Galooli RMS Live Console</span>
-                  </div>
+                  <span className="font-mono text-xs text-primary">{selectedScreenshot.siteId}</span>
                   <h3 className="text-lg sm:text-xl font-display text-foreground mt-0.5">
                     {selectedScreenshot.title}
                   </h3>
@@ -429,23 +416,19 @@ export const TelecomPage: React.FC = () => {
                 <div className="mt-4 p-4 rounded-xl glass text-xs sm:text-sm text-foreground max-w-3xl w-full leading-relaxed space-y-2">
                   <div className="flex items-center gap-2 font-mono text-xs text-primary font-semibold">
                     <CheckCircle2 className="size-4 text-signal-ok" />
-                    <span>Operational Sensor Context</span>
+                    <span>Operational Context</span>
                   </div>
                   <p className="text-muted-foreground">{selectedScreenshot.description}</p>
                 </div>
               </div>
 
-              <div className="p-3.5 sm:p-4 bg-background border-t border-border flex items-center justify-between text-xs font-mono text-muted-foreground">
-                <span>Asset: {selectedScreenshot.image.split("/").pop()}</span>
-                <a
-                  href={selectedScreenshot.image}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-primary hover:underline transition-colors"
-                >
-                  <span>Open Full Resolution</span>
-                  <ExternalLink className="size-3.5" />
-                </a>
+              <div className="p-4 bg-background border-t border-border flex items-center justify-between">
+                <span className="text-xs text-muted-foreground font-mono">
+                  Pan African Towers · Operations Dashboard Evidence
+                </span>
+                <Button variant="ghost" size="sm" onClick={() => setSelectedScreenshot(null)}>
+                  Close
+                </Button>
               </div>
             </motion.div>
           </div>
