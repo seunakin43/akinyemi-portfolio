@@ -166,9 +166,43 @@ export const DataAnalyticsPage: React.FC = () => {
               />
             </div>
             
-            <div className="glass absolute -bottom-3 left-4 flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs shadow-xl border border-white/10">
-              <BarChart3 className="size-3.5 text-primary" />
-              <span>Power BI · Tableau · SQL · 100k+ Records</span>
+            {/* Stacked Analytics Picture Representation (Bottom Left) */}
+            <div
+              onClick={() => setActiveImageLightbox({
+                title: "Washington State EV Dashboard (Tableau)",
+                image: "/analytics/washington_ev_tableau_dashboard.png",
+                caption: "Geographic and demographic analytics on 150,000+ electric vehicle records in Tableau with CAFV and fleet eligibility."
+              })}
+              className="absolute -bottom-6 -left-3 sm:-bottom-8 sm:-left-6 z-20 w-44 sm:w-52 rounded-2xl p-2 glass border border-white/15 bg-background/90 shadow-2xl backdrop-blur-xl group/card cursor-pointer transition-all duration-300 hover:scale-105"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10 bg-secondary/80">
+                <img
+                  src="/analytics/washington_ev_tableau_dashboard.png"
+                  alt="Executive Tableau Dashboard"
+                  className="h-full w-full object-cover object-left filter brightness-95 transition-transform duration-300 group-hover/card:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-80" />
+                <span className="absolute bottom-1.5 left-2 flex items-center gap-1 font-mono text-[10px] text-foreground font-medium">
+                  <BarChart3 className="size-3 text-amber-400" />
+                  <span>Tableau BI Dashboard</span>
+                </span>
+                <span className="absolute top-1.5 right-1.5 p-1 rounded-md bg-background/80 text-amber-400">
+                  <Maximize2 className="size-2.5" />
+                </span>
+              </div>
+              <div className="mt-1.5 flex items-center justify-between px-1 font-mono text-[10px] text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-signal-ok animate-pulse" />
+                  150k+ Records
+                </span>
+                <span className="text-amber-400 font-semibold">Tableau · DAX</span>
+              </div>
+            </div>
+
+            {/* Floating Top/Right Analytics Badge */}
+            <div className="glass absolute -top-3 right-3 flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-[11px] text-amber-400 shadow-lg border border-white/10 bg-background/80">
+              <BarChart3 className="size-3.5 text-amber-400" />
+              <span>Tableau · Power BI · SQL</span>
             </div>
           </div>
 
