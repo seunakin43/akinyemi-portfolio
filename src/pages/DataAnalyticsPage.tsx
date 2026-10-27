@@ -5,20 +5,31 @@ import {
   FileText, 
   Download, 
   ExternalLink, 
+  ArrowLeft, 
+  ArrowRight, 
   CheckCircle2, 
   Maximize2, 
   X, 
   Share2, 
   Mail, 
+  Database, 
+  TrendingUp, 
   PieChart, 
+  MapPin, 
+  ShieldCheck, 
   Check, 
-  ArrowDown
+  Layers 
 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { portfolioData, type DataAnalyticsProject } from "../data/portfolioData";
 import { Button } from "@/components/ui/button";
 import { HubBackLink } from "@/components/HubBackLink";
+import { cn } from "@/lib/utils";
 import { profile } from "@/data/content";
 
 export const DataAnalyticsPage: React.FC = () => {
+  const [selectedFilter, setSelectedFilter] = useState<string>("All");
+  const [activeModalProject, setActiveModalProject] = useState<DataAnalyticsProject | null>(null);
   const [activeImageLightbox, setActiveImageLightbox] = useState<{ title: string; image: string; caption?: string } | null>(null);
   const [copiedShareLink, setCopiedShareLink] = useState(false);
 
@@ -28,49 +39,41 @@ export const DataAnalyticsPage: React.FC = () => {
     setTimeout(() => setCopiedShareLink(false), 2000);
   };
 
-  const projects = [
-    {
-      id: "washington-ev",
-      title: "Electric vehicle adoption",
-      kicker: "Tableau · 150,000+ records",
-      description: "Explore vehicle registrations across Washington State by county, vehicle type and manufacturer.",
-      download: {
-        label: "Download Tableau Workbook (.twb)",
-        url: "/analytics/Washington_EV_Dashboard.twb"
-      },
-      image: "/analytics/washington_ev_tableau_dashboard.png"
-    },
-    {
-      id: "civic-powerbi",
-      title: "Civic and electoral data",
-      kicker: "Power BI · 100,000+ records",
-      description: "Support civic oversight with voter-record analysis, data checks and reporting dashboards across Osun and Ekiti state elections.",
-      image: "/analytics/kimpact_voter_dashboard_preview.png"
-    },
-    {
-      id: "btc-forecast",
-      title: "Bitcoin price trends",
-      kicker: "Power BI · Market data",
-      description: "Explore five years of price and trading-volume data with dynamic moving averages, high-watermark bands and forecast views.",
-      image: "/analytics/btc_usd_powerbi_forecast_light.png"
-    },
-    {
-      id: "global-survey",
-      title: "Global Data Professional Survey",
-      kicker: "Power BI · Compensation Benchmarks",
-      description: "Analyze global salary benchmarks, favorite programming languages (Python, SQL), and career transition satisfaction.",
-      download: {
-        label: "Download Power BI File (.pbix)",
-        url: "/analytics/Global_Data_Professional_Survey.pbix"
-      }
-    }
+  const categories = [
+    "All",
+    "Tableau",
+    "Power BI",
+    "Power BI & SQL",
+    "IoT Telemetry",
+    "SQL & Relational",
+    "Financial & Risk"
   ];
+
+  const filteredProjects = portfolioData.dataAnalyticsProjects.filter(
+    (p) => selectedFilter === "All" || p.tool === selectedFilter
+  );
+
+  const getToolIcon = (tool: string) => {
+    switch (tool) {
+      case "Tableau":
+        return PieChart;
+      case "Power BI":
+      case "Power BI & SQL":
+        return BarChart3;
+      case "IoT Telemetry":
+        return TrendingUp;
+      case "SQL & Relational":
+        return Database;
+      default:
+        return FileText;
+    }
+  };
 
   return (
     <div className="py-12 sm:py-20 bg-background min-h-screen text-foreground">
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 space-y-16">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 space-y-12">
         
-        {/* Navigation Bar Header */}
+        {/* Navigation Bar Header: Standalone Linkage */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-6">
           <HubBackLink />
 
@@ -93,261 +96,357 @@ export const DataAnalyticsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Subhero Section: Human, Clear, Not Text Heavy */}
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 items-center">
+        {/* Hero Section: Data Analytics & Business Intelligence */}
+        <div className="grid gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14 items-center">
           
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-mono uppercase tracking-[0.14em]">
-              <span className="size-1.5 rounded-full bg-amber-400" />
-              <span>Data analytics · Dashboards and insight</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/40 bg-primary/10 text-primary text-xs font-mono uppercase tracking-[0.14em]">
+              <BarChart3 className="size-3.5" />
+              <span>Business Intelligence · Predictive Modeling · SQL</span>
             </div>
 
-            <h1 className="font-display text-4xl sm:text-6xl text-foreground font-normal tracking-tight leading-[1.05]">
-              Turn large datasets into <em className="text-primary italic font-normal">clear decisions.</em>
+            <h1 className="font-serif text-4xl sm:text-6xl text-foreground font-normal tracking-tight leading-[1.05]">
+              From noisy telemetry to decisive intelligence. <em className="text-primary italic">Executive Dashboards</em> that leaders trust.
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl">
-              I clean, organize and analyze data, then present the findings in dashboards people can use. My projects include civic records, electric vehicle registrations and operational data.
+              I am Toluwanimi Akinyemi, Data & BI Specialist. Grounded in Financial Mathematics, I build executive dashboards, time-series forecasting models, and 3NF relational architectures across Power BI, Tableau, and SQL—turning large datasets into clear, decisive intelligence.
             </p>
 
+            {/* Quick Impact Bento */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              <div className="p-4 rounded-2xl glass border-border/80">
+                <span className="font-display text-3xl sm:text-4xl text-primary font-bold">150k+</span>
+                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">EV Records in Tableau</span>
+              </div>
+              <div className="p-4 rounded-2xl glass border-border/80">
+                <span className="font-display text-3xl sm:text-4xl text-signal-ok font-bold">100k+</span>
+                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">Civic Records in Power BI</span>
+              </div>
+              <div className="p-4 rounded-2xl glass border-border/80">
+                <span className="font-display text-3xl sm:text-4xl text-foreground font-bold">$33.6B</span>
+                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">Volume OHLC Modeled</span>
+              </div>
+              <div className="p-4 rounded-2xl glass border-border/80">
+                <span className="font-display text-3xl sm:text-4xl text-foreground font-bold">+18%</span>
+                <span className="block text-[11px] font-mono text-muted-foreground mt-0.5">Data Accuracy Gain</span>
+              </div>
+            </div>
+
+            {/* Credential Action Links */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground font-mono text-xs font-semibold shadow-md">
-                <a href="#projects" className="inline-flex items-center gap-2">
-                  Explore projects <ArrowDown className="size-4" />
-                </a>
-              </Button>
-
-              <Button asChild size="lg" variant="outline" className="glass border-white/10 bg-transparent text-foreground hover:border-primary/40 font-mono text-xs">
-                <a href={`mailto:${profile.email}?subject=Inquiry:%20Data%20Analytics`} className="inline-flex items-center gap-1.5">
-                  Discuss analytics ↗
-                </a>
-              </Button>
-            </div>
-
-            {/* Quick Tool Chips */}
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-secondary/80 text-secondary-foreground border border-border/50">
-                Power BI
-              </span>
-              <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-secondary/80 text-secondary-foreground border border-border/50">
-                Tableau
-              </span>
-              <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-secondary/80 text-secondary-foreground border border-border/50">
-                SQL &amp; 3NF
-              </span>
-              <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-secondary/80 text-secondary-foreground border border-border/50">
-                Advanced Excel
-              </span>
-            </div>
-          </div>
-
-          {/* Visual Step Box: Analysis Flow */}
-          <div className="glass rounded-3xl p-6 sm:p-7 border border-amber-500/30 bg-amber-500/[0.03] space-y-4 shadow-xl">
-            <div className="flex items-center justify-between pb-3 border-b border-border/60">
-              <span className="font-display text-base font-semibold text-foreground">From raw records to useful answers</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                Analysis flow
-              </span>
-            </div>
-
-            <p className="text-xs text-muted-foreground">
-              A clear path from data to decision
-            </p>
-
-            <div className="space-y-2">
-              <div className="p-3 rounded-xl bg-background/80 border border-border flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">Check and organize records</span>
-                <strong className="text-amber-400 font-mono font-semibold">Prepare</strong>
-              </div>
-              <div className="p-3 rounded-xl bg-background/80 border border-border flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">Find patterns and compare groups</span>
-                <strong className="text-primary font-mono font-semibold">Analyze</strong>
-              </div>
-              <div className="p-3 rounded-xl bg-background/80 border border-amber-500/40 bg-amber-500/[0.04] flex items-center justify-between text-xs">
-                <span className="text-foreground font-medium">Show the result in a dashboard</span>
-                <strong className="text-amber-400 font-mono font-bold">Explain</strong>
-              </div>
-            </div>
-
-            <div className="pt-3 border-t border-border/60 text-[11px] font-mono text-muted-foreground">
-              A chart should make the evidence easier to understand, not harder.
-            </div>
-          </div>
-
-        </div>
-
-        {/* Metrics Bar */}
-        <div className="glass rounded-2xl p-5 sm:p-6 border border-border/80">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="space-y-1">
-              <b className="font-display text-3xl sm:text-4xl text-primary font-bold block">150k+</b>
-              <span className="text-xs text-muted-foreground font-mono block">Electric vehicle records analyzed</span>
-            </div>
-            <div className="space-y-1 lg:border-l lg:border-border/60 lg:pl-6">
-              <b className="font-display text-3xl sm:text-4xl text-signal-ok font-bold block">100k+</b>
-              <span className="text-xs text-muted-foreground font-mono block">Civic records modeled</span>
-            </div>
-            <div className="space-y-1 lg:border-l lg:border-border/60 lg:pl-6">
-              <b className="font-display text-3xl sm:text-4xl text-foreground font-bold block">+18%</b>
-              <span className="text-xs text-muted-foreground font-mono block">Reported improvement in data accuracy</span>
-            </div>
-            <div className="space-y-1 lg:border-l lg:border-border/60 lg:pl-6">
-              <b className="font-display text-3xl sm:text-4xl text-amber-400 font-bold block">3 tools</b>
-              <span className="text-xs text-muted-foreground font-mono block">Power BI, Tableau and SQL</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Selected Projects */}
-        <section id="projects" className="space-y-8 scroll-mt-20">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 text-primary font-mono text-xs font-semibold uppercase tracking-wider">
-                <BarChart3 className="size-3.5" />
-                <span>Selected projects</span>
-              </div>
-              <h2 className="font-display text-3xl sm:text-4xl text-foreground mt-2">
-                Different datasets. Clear questions.
-              </h2>
-            </div>
-            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              Each project starts with a question, makes the data usable and presents a result that supports analysis.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {projects.map((p) => (
-              <div
-                key={p.id}
-                className="glass rounded-3xl overflow-hidden flex flex-col justify-between border-border/80 hover:border-amber-400/40 transition-all group"
+              <a
+                href="/analytics/Washington_EV_Dashboard.twb"
+                download
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-semibold glass border-primary/40 text-primary hover:bg-primary/10 transition-all shadow-sm"
               >
-                <div>
-                  {p.image && (
-                    <div
+                <Download className="size-4" />
+                <span>Tableau Workbook (.twb)</span>
+              </a>
+
+              <a
+                href="/analytics/Global_Data_Professional_Survey.pbix"
+                download
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-semibold glass border-white/10 text-foreground hover:border-primary/40 transition-all"
+              >
+                <Download className="size-4 text-primary" />
+                <span>Power BI Survey File (.pbix)</span>
+              </a>
+            </div>
+
+          </div>
+
+          {/* Right Column: Headshot in Glass Frame */}
+          <div className="relative mx-auto w-full max-w-sm">
+            <div className="glass overflow-hidden rounded-3xl p-2.5 shadow-2xl">
+              <img
+                src="/hh.jpg"
+                alt="Portrait of Toluwanimi Akinyemi"
+                className="aspect-[4/5] w-full rounded-2xl object-cover object-top filter brightness-95"
+              />
+            </div>
+            
+            <div className="glass absolute -bottom-3 left-4 flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs shadow-xl border border-white/10">
+              <BarChart3 className="size-3.5 text-primary" />
+              <span>Power BI · Tableau · SQL · 100k+ Records</span>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Specific & Precise About Data Analytics */}
+        <div className="p-8 sm:p-12 rounded-3xl glass border border-primary/20 space-y-6 relative overflow-hidden">
+          <div className="flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-wider">
+            <TrendingUp className="size-4" />
+            <span>Domain Specialization: Business Intelligence, Quantitative Modeling & Data Governance</span>
+          </div>
+
+          <h2 className="font-display text-2xl sm:text-4xl text-foreground">
+            Rigorous Quantitative Modeling & Actionable Decision Dashboards.
+          </h2>
+
+          <div className="grid gap-6 sm:grid-cols-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
+            <p>
+              My analytical foundation in Financial Mathematics guides how I structure data: translating stochastic modeling and quantitative rigor into clear executive dashboards.
+            </p>
+            <p>
+              From custom DAX time-series forecasting in Power BI to spatial mapping in Tableau and 3NF database design, I ensure data integrity from raw ingestion to executive presentation.
+            </p>
+          </div>
+
+          {/* Architecture Methodology Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-4">
+            <div className="p-4 rounded-xl bg-background/60 border border-border space-y-1">
+              <span className="font-mono text-xs font-bold text-primary flex items-center gap-1.5">
+                <BarChart3 className="size-3.5" /> Predictive DAX & Forecasting
+              </span>
+              <p className="text-xs text-muted-foreground">
+                Exponential smoothing models, multi-period moving averages, and dynamic volume-weighted price trends in Power BI.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-background/60 border border-border space-y-1">
+              <span className="font-mono text-xs font-bold text-primary flex items-center gap-1.5">
+                <PieChart className="size-3.5" /> Spatial & Fleet Analytics
+              </span>
+              <p className="text-xs text-muted-foreground">
+                Tableau geographic mapping, Clean Alternative Fuel Vehicle (CAFV) filtering, and manufacturer market share breakdown across 150k+ records.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-background/60 border border-border space-y-1">
+              <span className="font-mono text-xs font-bold text-primary flex items-center gap-1.5">
+                <Database className="size-3.5" /> Data Governance & 3NF Schemas
+              </span>
+              <p className="text-xs text-muted-foreground">
+                Third normal form (3NF) relational modeling, automated deduplication, and referential integrity improving reporting accuracy by 18%.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Filter Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none border-b border-border/60">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedFilter(cat)}
+              className={cn(
+                "px-3.5 py-1.5 rounded-full text-xs font-mono transition-all whitespace-nowrap cursor-pointer",
+                selectedFilter === cat
+                  ? "bg-primary text-primary-foreground font-semibold"
+                  : "glass text-muted-foreground hover:text-foreground"
+              )}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {filteredProjects.map((project, idx) => {
+            const Icon = getToolIcon(project.tool);
+
+            return (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                className="glass glass-lift rounded-3xl overflow-hidden flex flex-col justify-between border-border/80 hover:border-primary/50 transition-all group"
+              >
+                <div className="p-6 sm:p-7 space-y-4">
+                  
+                  {/* Category and Metric Badges */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-primary/10 text-primary border border-primary/30">
+                      <Icon className="size-3.5" />
+                      {project.tool}
+                    </span>
+                    <span className="glass rounded-full px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground">
+                      {project.metrics[0]}
+                    </span>
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <div>
+                    <h3 className="font-display text-2xl sm:text-3xl text-foreground leading-snug group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="font-mono text-xs text-primary/80 mt-1">
+                      {project.subtitle}
+                    </p>
+                  </div>
+
+                  {/* Image Preview with Lightbox Trigger */}
+                  {project.image && (
+                    <div 
                       onClick={() => setActiveImageLightbox({
-                        title: p.title,
-                        image: p.image!,
-                        caption: p.description
+                        title: project.title,
+                        image: project.image!,
+                        caption: project.subtitle
                       })}
-                      className="relative aspect-[16/10] bg-secondary/80 overflow-hidden cursor-pointer border-b border-border/60"
+                      className="rounded-2xl overflow-hidden border border-border/80 aspect-[16/10] bg-secondary cursor-pointer relative group/img shadow-md"
                     >
                       <img
-                        src={p.image}
-                        alt={p.title}
-                        className="w-full h-full object-cover filter brightness-95 group-hover:scale-105 transition-all duration-300"
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover filter brightness-95 group-hover/img:scale-105 transition-all duration-300"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-80 group-hover/img:opacity-100 transition-opacity" />
                       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs font-mono text-white">
-                        <span className="text-[11px] opacity-90">Click to expand preview</span>
+                        <span className="text-[11px] opacity-90">Click to expand dashboard</span>
                         <Maximize2 className="size-3.5 text-primary" />
                       </div>
                     </div>
                   )}
 
-                  <div className="p-6 space-y-2">
-                    <span className="text-[10px] font-mono text-amber-400 uppercase tracking-wider">
-                      {p.kicker}
-                    </span>
-                    <h3 className="font-display text-2xl text-foreground group-hover:text-amber-400 transition-colors">
-                      {p.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                      {p.description}
-                    </p>
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                    {project.description}
+                  </p>
+
+                  {/* Core Technologies */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {project.technologies.slice(0, 4).map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2.5 py-0.5 rounded-lg bg-secondary/80 text-secondary-foreground font-mono text-[11px] border border-border/40"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.technologies.length > 4 && (
+                      <span className="px-2 py-0.5 rounded-lg bg-secondary/40 text-muted-foreground font-mono text-[10px]">
+                        +{project.technologies.length - 4} more
+                      </span>
+                    )}
                   </div>
+
                 </div>
 
-                <div className="p-5 bg-secondary/20 border-t border-border/40 flex flex-wrap items-center justify-between gap-3">
-                  {p.download && (
-                    <a
-                      href={p.download.url}
-                      download
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 transition-colors"
-                    >
-                      <Download className="size-3.5" />
-                      <span>{p.download.label}</span>
-                    </a>
-                  )}
+                {/* Card Footer Actions */}
+                <div className="p-6 sm:p-7 pt-3 border-t border-border/40 flex flex-wrap items-center justify-between gap-3 bg-secondary/20">
+                  <div className="flex items-center gap-2">
+                    {project.fileDownload && (
+                      <a
+                        href={project.fileDownload.url}
+                        download
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors"
+                      >
+                        <Download className="size-3.5" />
+                        <span>{project.fileDownload.label}</span>
+                      </a>
+                    )}
+                  </div>
 
-                  <a
-                    href={`mailto:${profile.email}?subject=Inquiry:%20${encodeURIComponent(p.title)}`}
-                    className="inline-flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors ml-auto"
+                  <button
+                    onClick={() => setActiveModalProject(project)}
+                    className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-primary hover:text-primary/80 transition-colors cursor-pointer ml-auto"
                   >
-                    <span>Ask about this project ↗</span>
-                  </a>
+                    <span>Inspect Case Study →</span>
+                  </button>
+
                 </div>
-              </div>
-            ))}
-          </div>
 
-          <p className="text-xs text-muted-foreground italic">
-            The electric vehicle and civic records are separate datasets. The figures above refer to different projects.
-          </p>
-        </section>
-
-        {/* How I Work Section */}
-        <section className="space-y-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 text-primary font-mono text-xs font-semibold uppercase tracking-wider">
-                <CheckCircle2 className="size-3.5" />
-                <span>How I work</span>
-              </div>
-              <h2 className="font-display text-3xl text-foreground mt-1">
-                Make the data dependable before making it visual.
-              </h2>
-            </div>
-            <p className="text-sm text-muted-foreground max-w-md">
-              Careful checks help readers understand what a chart shows and what conclusions the data can support.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="glass rounded-3xl p-6 border-border/80 space-y-2">
-              <strong className="font-display text-2xl text-foreground block">Check</strong>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Find missing values, duplicates and inconsistent labels.
-              </p>
-            </div>
-
-            <div className="glass rounded-3xl p-6 border-border/80 space-y-2">
-              <strong className="font-display text-2xl text-foreground block">Analyze</strong>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Compare the right groups and keep definitions clear.
-              </p>
-            </div>
-
-            <div className="glass rounded-3xl p-6 border-border/80 space-y-2">
-              <strong className="font-display text-2xl text-foreground block">Communicate</strong>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Build a dashboard that answers a practical question.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Callout Section */}
-        <div className="glass rounded-3xl p-7 sm:p-8 border border-amber-500/30 bg-amber-500/[0.04] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-          <div className="space-y-1">
-            <h3 className="font-display text-2xl text-foreground">Need help making a dataset easier to use?</h3>
-            <p className="text-xs sm:text-sm text-muted-foreground">Let’s discuss the question, the data and the right way to present the findings.</p>
-          </div>
-          <a
-            href={`mailto:${profile.email}?subject=Inquiry:%20Dataset%20Consultation`}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm shrink-0"
-          >
-            <span>Get in touch ↗</span>
-          </a>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Footer Linkage */}
-        <div className="pt-8 border-t border-border/60 flex items-center justify-between text-xs font-mono text-muted-foreground">
+        {/* Return to Main Portfolio Link at Footer */}
+        <div className="pt-8 border-t border-border/60 flex items-center justify-between">
           <HubBackLink />
-          <span>Data analytics · Toluwanimi Akinyemi</span>
-          <a href="/cloud" className="hover:text-primary transition-colors">Next: Cloud ↗</a>
+          <span className="text-xs font-mono text-muted-foreground ml-auto">
+            Toluwanimi Akinyemi · Data Analytics & BI Portfolio
+          </span>
         </div>
 
       </div>
+
+      {/* Case Study Modal */}
+      <AnimatePresence>
+        {activeModalProject && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveModalProject(null)}
+              className="fixed inset-0 bg-background/90 backdrop-blur-md"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative w-full max-w-3xl bg-card border border-border rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[92vh]"
+            >
+              <div className="p-5 sm:p-6 bg-background border-b border-border flex items-center justify-between gap-4">
+                <div>
+                  <span className="font-mono text-xs text-primary">{activeModalProject.tool} Case Study</span>
+                  <h3 className="text-xl sm:text-2xl font-display text-foreground mt-0.5">
+                    {activeModalProject.title}
+                  </h3>
+                </div>
+
+                <button
+                  onClick={() => setActiveModalProject(null)}
+                  className="p-2 rounded-xl bg-secondary hover:bg-accent text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+
+              <div className="p-6 overflow-y-auto space-y-6">
+                <div>
+                  <h4 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">The Business & Operational Problem</h4>
+                  <p className="text-sm text-foreground mt-1.5 leading-relaxed">{activeModalProject.details.problem}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">The Analytics Solution</h4>
+                  <p className="text-sm text-foreground mt-1.5 leading-relaxed">{activeModalProject.details.solution}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Technical Implementation</h4>
+                  <ul className="space-y-2 mt-2">
+                    {activeModalProject.details.implementation.map((step, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-muted-foreground">
+                        <CheckCircle2 className="size-4 text-primary shrink-0 mt-0.5" />
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-4 rounded-2xl glass border border-primary/30 bg-primary/5">
+                  <h4 className="font-mono text-xs uppercase tracking-wider text-primary font-bold">Commercial & Operational Impact</h4>
+                  <p className="text-xs sm:text-sm text-foreground mt-1 leading-relaxed">{activeModalProject.details.impact}</p>
+                </div>
+              </div>
+
+              <div className="p-4 bg-background border-t border-border flex items-center justify-between">
+                {activeModalProject.fileDownload && (
+                  <a
+                    href={activeModalProject.fileDownload.url}
+                    download
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                  >
+                    <Download className="size-3.5" />
+                    <span>{activeModalProject.fileDownload.label}</span>
+                  </a>
+                )}
+                <Button variant="ghost" size="sm" onClick={() => setActiveModalProject(null)} className="ml-auto">
+                  Close
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Lightbox Modal for Screenshots */}
       <AnimatePresence>
@@ -369,7 +468,7 @@ export const DataAnalyticsPage: React.FC = () => {
             >
               <div className="p-4 sm:p-5 bg-background border-b border-border flex items-center justify-between gap-4">
                 <div>
-                  <span className="font-mono text-xs text-primary">Data Analytics Evidence</span>
+                  <span className="font-mono text-xs text-primary">Data Analytics & Telemetry Evidence</span>
                   <h3 className="text-lg sm:text-xl font-display text-foreground mt-0.5">
                     {activeImageLightbox.title}
                   </h3>
@@ -391,26 +490,30 @@ export const DataAnalyticsPage: React.FC = () => {
                     className="max-h-[65vh] w-auto object-contain rounded-xl"
                   />
                 </div>
+
                 {activeImageLightbox.caption && (
-                  <p className="mt-3 text-xs sm:text-sm text-muted-foreground text-center max-w-2xl">
+                  <p className="mt-4 p-3 rounded-xl glass text-xs text-muted-foreground max-w-3xl text-center">
                     {activeImageLightbox.caption}
                   </p>
                 )}
               </div>
 
-              <div className="p-4 bg-background border-t border-border flex items-center justify-between">
-                <span className="text-xs font-mono text-muted-foreground">
-                  Toluwanimi Akinyemi · Data Analytics Portfolio
-                </span>
-                <Button variant="ghost" size="sm" onClick={() => setActiveImageLightbox(null)}>
-                  Close
-                </Button>
+              <div className="p-3.5 sm:p-4 bg-background border-t border-border flex items-center justify-between text-xs font-mono text-muted-foreground">
+                <span>Asset: {activeImageLightbox.image.split("/").pop()}</span>
+                <a
+                  href={activeImageLightbox.image}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-primary hover:underline transition-colors"
+                >
+                  <span>Open Full Resolution</span>
+                  <ExternalLink className="size-3.5" />
+                </a>
               </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
-
     </div>
   );
 };

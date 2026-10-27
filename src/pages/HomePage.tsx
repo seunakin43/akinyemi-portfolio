@@ -20,14 +20,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenTerminal, onOpenHotkey
       <Ambient />
       <main id="main" tabIndex={-1} className="outline-none">
         
-        {/* 1. Hero Section (Headline, Value proposition, Workflow Art, and Proof bar) */}
+        {/* 1. Hero Section (Profile Summary & Executive Headshot) */}
         <Hero />
 
-        {/* 2. Selected Work Gateway (50% Automation, 30% Telecom, 20% Analytics + Cloud Support) */}
-        <HubsGateway />
-
-        {/* 3. Professional Philosophy & Background */}
+        {/* 2. Professional Executive About (Elevated immediately after Hero) */}
         <About />
+
+        {/* 3. Standalone Technical Hubs Gateway (3 Specialized Portfolios) */}
+        <HubsGateway />
 
         {/* 4. Live 789+ Node Telemetry & Operational Numbers */}
         <Numbers />
