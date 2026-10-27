@@ -119,42 +119,14 @@ export const Hero: React.FC = () => {
               />
             </div>
 
-            {/* Stacked Domain Picture Representation (Bottom Left) */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 15, scale: 0.92 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.35 }}
-              className="absolute -bottom-6 -left-3 sm:-bottom-8 sm:-left-6 z-20 w-44 sm:w-52 rounded-2xl p-2 glass border border-white/15 bg-background/90 shadow-2xl backdrop-blur-xl group/card transition-all duration-300 hover:scale-105"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10 bg-secondary/80">
-                <img
-                  src="/media/10. MAKE scenario full canvas.png"
-                  alt="Production Autonomous Workflow"
-                  className="h-full w-full object-cover object-left filter brightness-95 transition-transform duration-300 group-hover/card:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-80" />
-                <span className="absolute bottom-1.5 left-2 flex items-center gap-1 font-mono text-[10px] text-foreground font-medium">
-                  <Cpu className="size-3 text-primary" />
-                  <span>Production AI Workflow</span>
-                </span>
-              </div>
-              <div className="mt-1.5 flex items-center justify-between px-1 font-mono text-[10px] text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <span className="size-1.5 rounded-full bg-signal-ok animate-pulse" />
-                  Active Pipelines
-                </span>
-                <span className="text-primary font-semibold">n8n · Make</span>
-              </div>
-            </motion.div>
-
-            {/* Floating Live Badge (Bottom Right) */}
-            <div className="glass absolute -bottom-4 right-3 flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-xs shadow-xl border border-white/10 bg-background/80">
+            {/* Floating Live Badge */}
+            <div className="glass absolute -bottom-4 left-4 flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs shadow-xl">
               <span className="size-2 rounded-full bg-signal-ok animate-pulse" aria-hidden="true" />
               <span>NOC Operator · Pan African Towers</span>
             </div>
 
             {/* Floating Top Badge */}
-            <div className="glass absolute -top-3 right-3 flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-[11px] text-primary shadow-lg border border-white/10 bg-background/80">
+            <div className="glass absolute -top-3 right-3 flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-[11px] text-primary shadow-lg">
               <ShieldCheck className="size-3.5" />
               <span>ACTD ID: 34RVXFBKSU73N</span>
             </div>
